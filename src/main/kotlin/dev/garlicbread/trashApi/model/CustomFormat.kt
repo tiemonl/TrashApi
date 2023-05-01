@@ -5,19 +5,20 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class CustomFormat(
     val trash_id: String,
+    val trash_score: String?,
     val name: String,
-    val includeCustomFormatWhenRenaming: Boolean,
-    val specifications: List<Specification>
+    val includeCustomFormatWhenRenaming: Boolean?,
+    val specifications: List<Specification>,
 ) {
     data class Specification(
-        val name: String,
+        val fields: Fields,
         val implementation: String,
+        val name: String,
         val negate: Boolean,
         val required: Boolean,
-        val fields: Fields
     ) {
         data class Fields(
-            val value: Any
+            val value: Any,
         )
     }
 }

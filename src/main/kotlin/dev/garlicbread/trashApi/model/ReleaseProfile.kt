@@ -10,10 +10,10 @@ data class ReleaseProfile(
     val required: List<Any>,
     val preferred: List<Preferred>,
     val ignored: List<Any>,
-    val community_id: String?
+    val community_id: String?,
 ) {
     data class Preferred(
         val score: Int,
-        val terms: List<Any>
+        val terms: List<Any>,
     )
 }

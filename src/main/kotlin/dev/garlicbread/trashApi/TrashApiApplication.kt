@@ -1,6 +1,5 @@
 package dev.garlicbread.trashApi
 
-import dev.garlicbread.trashApi.singleton.Configuration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
