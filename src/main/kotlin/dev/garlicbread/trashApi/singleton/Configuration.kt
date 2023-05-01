@@ -12,11 +12,11 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 object Configuration {
-    private lateinit var radarrCustomFormatPath: String
-    private lateinit var radarrQualitySizePath: String
-    private lateinit var sonarrCustomFormatPath: String
-    private lateinit var sonarrQualitySizePath: String
-    private lateinit var sonarrReleaseProfilePath: String
+    private lateinit var radarrCustomFormatPaths: List<String>
+    private lateinit var radarrQualitySizePaths: List<String>
+    private lateinit var sonarrCustomFormatPaths: List<String>
+    private lateinit var sonarrQualitySizePaths: List<String>
+    private lateinit var sonarrReleaseProfilePaths: List<String>
 
     var radarrQualitySizes: List<QualitySize>
     var radarrCustomFormats: List<CustomFormat>
@@ -30,37 +30,43 @@ object Configuration {
     init {
         logger.warn { "Configuration Init ${System.getProperty("user.dir")}" }
         createPaths()
-        radarrQualitySizes = getAllQualitySizes(radarrQualitySizePath)
-        radarrCustomFormats = getAllCustomFormats(radarrCustomFormatPath)
-        sonarrQualitySizes = getAllQualitySizes(sonarrQualitySizePath)
-        sonarrCustomFormats = getAllCustomFormats(sonarrCustomFormatPath)
-        sonarrReleaseProfiles = getAllReleaseProfiles(sonarrReleaseProfilePath)
+        radarrQualitySizes = getAllQualitySizes(radarrQualitySizePaths)
+        radarrCustomFormats = getAllCustomFormats(radarrCustomFormatPaths)
+        sonarrQualitySizes = getAllQualitySizes(sonarrQualitySizePaths)
+        sonarrCustomFormats = getAllCustomFormats(sonarrCustomFormatPaths)
+        sonarrReleaseProfiles = getAllReleaseProfiles(sonarrReleaseProfilePaths)
     }
 
     private fun createPaths() {
         val metadata = moshi.adapter(Metadata::class.java).fromJson(getResourceAsText("guide/metadata.json"))!!
-        radarrCustomFormatPath = "guide/${metadata.json_paths.radarr.custom_formats.first()}"
-        radarrQualitySizePath = "guide/${metadata.json_paths.radarr.qualities.first()}"
-        sonarrCustomFormatPath = "guide/${metadata.json_paths.sonarr.custom_formats.first()}"
-        sonarrQualitySizePath = "guide/${metadata.json_paths.sonarr.qualities.first()}"
-        sonarrReleaseProfilePath = "guide/${metadata.json_paths.sonarr.release_profiles.first()}"
+        radarrCustomFormatPaths = metadata.json_paths.radarr.custom_formats.map { "guide/$it" }
+        radarrQualitySizePaths = metadata.json_paths.radarr.qualities.map { "guide/$it" }
+        sonarrCustomFormatPaths = metadata.json_paths.sonarr.custom_formats.map { "guide/$it" }
+        sonarrQualitySizePaths = metadata.json_paths.sonarr.qualities.map { "guide/$it" }
+        sonarrReleaseProfilePaths = metadata.json_paths.sonarr.release_profiles.map { "guide/$it" }
     }
 
-    private fun getAllQualitySizes(path: String) = buildList {
-        Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
-            moshi.adapter(QualitySize::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+    private fun getAllQualitySizes(paths: List<String>) = buildList {
+        paths.map { path ->
+            Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
+                moshi.adapter(QualitySize::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+            }
         }
     }
 
-    private fun getAllCustomFormats(path: String) = buildList {
-        Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
-            moshi.adapter(CustomFormat::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+    private fun getAllCustomFormats(paths: List<String>) = buildList {
+        paths.map { path ->
+            Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
+                moshi.adapter(CustomFormat::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+            }
         }
     }
 
-    private fun getAllReleaseProfiles(path: String) = buildList {
-        Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
-            moshi.adapter(ReleaseProfile::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+    private fun getAllReleaseProfiles(paths: List<String>) = buildList {
+        paths.map { path ->
+            Files.walk(Paths.get(path)).filter { Files.isRegularFile(it) }.forEach { file ->
+                moshi.adapter(ReleaseProfile::class.java).fromJson(getResourceAsText(file.toString()))?.let { add(it) }
+            }
         }
     }
 }
