@@ -1,14 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.3"
-    id("io.spring.dependency-management") version "1.0.13.RELEASE"
+    id("org.springframework.boot") version "3.0.0"
+    id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
+    id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.21"
 }
 
 group = "dev.garlicbread"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -18,9 +19,13 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    implementation("io.springfox:springfox-swagger-ui:3.0.0")
-    implementation("io.springfox:springfox-swagger2:3.0.0")
+
+    // Swagger
+    implementation("javax.validation:validation-api:2.0.1.Final")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -30,11 +35,6 @@ dependencies {
 
     // Moshi
     implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-
-    // Open Api 3
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.15")
-    implementation("org.springdoc:springdoc-openapi-data-rest:1.6.15")
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.15")
 
     // Logging
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
@@ -57,7 +57,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 

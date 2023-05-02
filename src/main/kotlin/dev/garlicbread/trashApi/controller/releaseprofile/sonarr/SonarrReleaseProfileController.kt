@@ -5,6 +5,8 @@ import dev.garlicbread.trashApi.exceptions.quality.sonarr.SonarrReleaseProfileEx
 import dev.garlicbread.trashApi.exceptions.quality.sonarr.SonarrReleaseProfileException.SonarrReleaseProfileNotFoundException
 import dev.garlicbread.trashApi.model.ReleaseProfile
 import dev.garlicbread.trashApi.service.releaseprofile.sonarr.SonarrReleaseProfileService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping(APIConfig.API_PATH + "sonarr")
+@Tag(name = "Sonarr Release Profile", description = "Release profiles within sonarr")
 class SonarrReleaseProfileController @Autowired constructor(
     private val sonarrReleaseProfileService: SonarrReleaseProfileService,
 ) {
+    @Operation(summary = "Get all release profiles")
     @RequestMapping(
         value = ["release-profiles"],
         method = [RequestMethod.GET],
@@ -29,6 +33,7 @@ class SonarrReleaseProfileController @Autowired constructor(
         return ResponseEntity.ok(response)
     }
 
+    @Operation(summary = "Get a single release profile with a trash_id")
     @RequestMapping(
         value = ["release-profiles/{trash_id}"],
         method = [RequestMethod.GET],

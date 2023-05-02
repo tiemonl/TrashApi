@@ -5,6 +5,8 @@ import dev.garlicbread.trashApi.exceptions.customformats.sonarr.SonarrCustomForm
 import dev.garlicbread.trashApi.exceptions.customformats.sonarr.SonarrCustomFormatException.SonarrCustomFormatNotFoundException
 import dev.garlicbread.trashApi.model.CustomFormat
 import dev.garlicbread.trashApi.service.customformats.sonarr.SonarrCustomFormatService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping(APIConfig.API_PATH + "sonarr")
+@Tag(name = "Sonarr Custom Format", description = "Custom formats within sonarr")
 class SonarrCustomFormatController @Autowired constructor(
     private val sonarrCustomFormatService: SonarrCustomFormatService,
 ) {
+    @Operation(summary = "Get all custom formats")
     @RequestMapping(
         value = ["custom-formats"],
         method = [RequestMethod.GET],
@@ -29,6 +33,7 @@ class SonarrCustomFormatController @Autowired constructor(
         return ResponseEntity.ok(response)
     }
 
+    @Operation(summary = "Get a single custom format with a trash_id")
     @RequestMapping(
         value = ["custom-formats/{trash_id}"],
         method = [RequestMethod.GET],

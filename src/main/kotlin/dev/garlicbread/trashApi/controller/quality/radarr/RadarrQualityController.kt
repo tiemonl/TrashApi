@@ -1,9 +1,12 @@
 package dev.garlicbread.trashApi.controller.quality.radarr
 
 import dev.garlicbread.trashApi.config.APIConfig
-import dev.garlicbread.trashApi.exceptions.customformats.radarr.RadarrQualityException.*
+import dev.garlicbread.trashApi.exceptions.customformats.radarr.RadarrQualityException.RadarrQualityBadRequestException
+import dev.garlicbread.trashApi.exceptions.customformats.radarr.RadarrQualityException.RadarrQualityNotFoundException
 import dev.garlicbread.trashApi.model.QualitySize
 import dev.garlicbread.trashApi.service.quality.radarr.RadarrQualityService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping(APIConfig.API_PATH + "radarr")
+@Tag(name = "Radarr Quality", description = "Qualities within radarr")
 class RadarrQualityController @Autowired constructor(
     private val radarrQualityService: RadarrQualityService,
 ) {
+    @Operation(summary = "Get all quality sizes")
     @RequestMapping(
         value = ["quality"],
         method = [RequestMethod.GET],
@@ -28,6 +33,7 @@ class RadarrQualityController @Autowired constructor(
         return ResponseEntity.ok(response)
     }
 
+    @Operation(summary = "Get a single quality size with a trash_id")
     @RequestMapping(
         value = ["quality/{trash_id}"],
         method = [RequestMethod.GET],
