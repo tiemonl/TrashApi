@@ -13,6 +13,6 @@ RUN git clone https://github.com/TRaSH-/Guides.git
 FROM openjdk:17-jdk-alpine
 WORKDIR /app
 EXPOSE 4444
-COPY --from=builder /builder/build/libs/trashApi.jar .
+COPY --from=builder /builder/build/libs/TRaSH_Api.jar .
 COPY --from=git /tmp/Guides ./guide
-CMD ["java", "-jar", "trashApi.jar"]
+CMD ["java", "-jar", "TRaSH_Api.jar"]

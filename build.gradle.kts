@@ -34,10 +34,10 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
     // Moshi
-    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 
     // Logging
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -51,7 +51,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     // Mockk
-    testImplementation("com.ninja-squad:springmockk:4.0.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -63,4 +63,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    this.archiveFileName.set("TRaSH_Api.jar")
 }
