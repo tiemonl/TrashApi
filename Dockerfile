@@ -12,7 +12,8 @@ RUN git clone https://github.com/TRaSH-/Guides.git
 
 FROM openjdk:17-jdk-alpine
 WORKDIR /app
-EXPOSE 4444
+EXPOSE 4444:4444
+EXPOSE 4445:4445
 COPY --from=builder /builder/build/libs/TRaSH_Api.jar .
 COPY --from=git /tmp/Guides ./guide
 CMD ["java", "-jar", "TRaSH_Api.jar"]
